@@ -6,7 +6,7 @@ import {
 } from '@coding-challenge/stocks/data-access-app-config';
 import { Effect } from '@ngrx/effects';
 import { DataPersistence } from '@nrwl/nx';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import {
   FetchPriceQuery,
   PriceQueryActionTypes,
@@ -29,8 +29,18 @@ export class PriceQueryEffects {
             }?token=${this.env.apiKey}`
           )
           .pipe(
-            map(resp => new PriceQueryFetched(resp as PriceQueryResponse[]))
-          );
+            map((resp: PriceQueryResponse[]) =>
+            resp.filter(priceQuery => {
+                const respDate = new Date(priceQuery.date + ' 0:0:0');
+                const minDate = action.fromDate.getTime();
+                const maxDate = action.toDate.getTime();
+                return (respDate.getTime() >= minDate && respDate.getTime() <= maxDate)
+              })), switchMap(resp => {
+                return [
+                  new PriceQueryFetched(resp as PriceQueryResponse[]),
+                ];
+              })
+            )
       },
 
       onError: (action: FetchPriceQuery, error) => {
