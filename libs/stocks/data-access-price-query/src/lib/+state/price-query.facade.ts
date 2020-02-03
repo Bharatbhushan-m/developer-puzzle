@@ -4,11 +4,12 @@ import { FetchPriceQuery } from './price-query.actions';
 import { PriceQueryPartialState } from './price-query.reducer';
 import { getSelectedSymbol, getAllPriceQueries } from './price-query.selectors';
 import { map, skip } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class PriceQueryFacade {
-  selectedSymbol$ = this.store.pipe(select(getSelectedSymbol));
-  priceQueries$ = this.store.pipe(
+  selectedSymbol$: Observable<string> = this.store.pipe(select(getSelectedSymbol));
+  priceQueries$:  Observable<(string | number)[][]>  = this.store.pipe(
     select(getAllPriceQueries),
     skip(1),
     map(priceQueries =>
