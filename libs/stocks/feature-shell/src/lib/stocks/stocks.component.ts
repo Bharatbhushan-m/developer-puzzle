@@ -13,7 +13,6 @@ export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   symbol: string;
   maxDate: Date = new Date();
-  period: string;
 
   quotes$ = this.priceQuery.priceQueries$;
 
@@ -37,8 +36,7 @@ export class StocksComponent implements OnInit {
   fetchQuote() {
     if (this.stockPickerForm.valid) {
       const { symbol, fromDate, toDate } = this.stockPickerForm.value;
-      this.period = 'max';
-      this.priceQuery.fetchQuote(symbol, this.period, fromDate, toDate);
+      this.priceQuery.fetchQuote(symbol, fromDate, toDate);
     }
   }
 
