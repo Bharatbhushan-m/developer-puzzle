@@ -42,10 +42,11 @@ describe('StocksComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
+  describe('Initialization', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+});
   describe('detectChanges', () => {
     it('should not process  quotes if only symbol was provided', () => {
       component.stockPickerForm.patchValue({
@@ -90,7 +91,8 @@ describe('StocksComponent', () => {
       expect(priceQueryFacade.fetchQuote).toHaveBeenCalledTimes(1);
       expect(priceQueryFacade.fetchQuote).toHaveBeenCalledWith('AAPL', 'max', fromDate, toDate);
     });
-
+  });
+  describe('fromDateChange', () => {
     it('should success, if valid values are provided.', () => {
       const fromDate = new Date("2019-02-23");
       const toDate = new Date("2020-02-02");
@@ -125,7 +127,8 @@ describe('StocksComponent', () => {
       expect(component.stockPickerForm.controls['fromDate'].value.getMonth()).toEqual(fromDate.getMonth());
       expect(component.stockPickerForm.controls['fromDate'].value.getFullYear()).toEqual(fromDate.getFullYear());
     });
-
+  });
+  describe('toDateChange', () => {
     it('to date should be as set to from date if invalid date provided.', () => {
       const toDate = new Date("2019-01-22");
       const fromDate = new Date("2020-01-13");

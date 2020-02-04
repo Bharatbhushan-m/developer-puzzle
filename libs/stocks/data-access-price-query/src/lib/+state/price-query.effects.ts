@@ -25,7 +25,7 @@ export class PriceQueryEffects {
         return this.httpClient
           .get(
             `${this.env.apiURL}/beta/stock/${action.symbol}/chart/${
-              action.period
+              'max'
             }?token=${this.env.apiKey}`
           )
           .pipe(
