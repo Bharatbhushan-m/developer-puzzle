@@ -5,7 +5,8 @@ import {
   Input,
   OnInit
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'coding-challenge-chart',
@@ -14,7 +15,9 @@ import { Observable } from 'rxjs';
 })
 export class ChartComponent implements OnInit {
   @Input() data$: Observable<any>;
-  chartData: any;
+  public chartData: []; /*changed 'any' to Array type for more generic*/
+  public chartDataUnsubscribe: Subject<void> = new Subject<void>();
+
 
   chart: {
     title: string;
@@ -23,7 +26,7 @@ export class ChartComponent implements OnInit {
     columnNames: string[];
     options: any;
   };
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor() {}
 
   ngOnInit() {
     this.chart = {
@@ -34,6 +37,17 @@ export class ChartComponent implements OnInit {
       options: { title: `Stock price`, width: '600', height: '400' }
     };
 
-    this.data$.subscribe(newData => (this.chartData = newData));
+    this.data$.pipe(takeUntil(this.chartDataUnsubscribe))
+      .subscribe(newData => (this.chartData = newData));
+
   }
+
+  /**
+  * Added unscubscription to avoid memory leaks
+  */
+  ngOnDestroy() {
+    this.chartDataUnsubscribe.next();
+    this.chartDataUnsubscribe.complete();
+  }
+
 }
