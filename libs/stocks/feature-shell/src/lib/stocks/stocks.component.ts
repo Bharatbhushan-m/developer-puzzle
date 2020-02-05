@@ -10,8 +10,6 @@ import { Observable } from 'rxjs';
 })
 export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
-  symbol: string;
-  period: string;
 
   public quotes$: Observable<(string | number)[][]> = this.priceQuery.priceQueries$;
 

@@ -26,7 +26,7 @@ export class ChartComponent implements OnInit {
     columnNames: string[];
     options: any;
   };
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor() {}
 
   ngOnInit() {
     this.chart = {
@@ -38,16 +38,16 @@ export class ChartComponent implements OnInit {
     };
 
     this.data$.pipe(takeUntil(this.chartDataUnsubscribe))
-    .subscribe(newData => (this.chartData = newData));
+      .subscribe(newData => (this.chartData = newData));
 
   }
 
   /**
   * Added unscubscription to avoid memory leaks
   */
- ngOnDestroy() {
-  this.chartDataUnsubscribe.next();
-  this.chartDataUnsubscribe.complete();
-}
+  ngOnDestroy() {
+    this.chartDataUnsubscribe.next();
+    this.chartDataUnsubscribe.complete();
+  }
 
 }
